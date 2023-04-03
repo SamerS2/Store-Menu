@@ -9,7 +9,7 @@ using namespace std;
 //Function protoypes
 void showMenu();
 void adminMenu();
-void adminSubMenu(char choice);
+void adminSubMenu(int choice);
 void productFile();
 void appendInventoryc(int pNO, string& itemName, int quantity);
 void inventoryControl();
@@ -32,20 +32,19 @@ int main()
     //the decisions are shown in the menu and admin submenu
     while (choice != '3' && choice != '4') {
       cin.clear();
+      cin.ignore(1000, '\n');
       cout << endl;
       switch (choice) {
       case '1'://customer purchasing product and showing invoice after
-            customerOrder();
-            choice = '3';
-           break;
+          
+          customerOrder();
+          choice = '3';
+          break;
       case '2'://ADMIN SUB MENU
-            adminMenu();
-            cin >> choice;
-
-            adminSubMenu(choice);
-            break;
+          adminMenu();
+          break;
        case '3': // EXIT PROGRAM
-            exit(0);
+          exit(0);
         }
     }
     return 0;
@@ -59,27 +58,31 @@ void showMenu() {
 }
 //Function to display admin menu
 void adminMenu() {
+    int choice = 0;
     cout << "\nADMIN SUB-MENU\n\n";
 
     cout << "01. INVENTORY CONTROL" << endl << "02. PRODUCT'S LIST" << endl << "03. RETURN TO MENU"
         << endl << "04. EXIT PROGRAM" << endl << endl;
 
     cout << "Please select your option <1-4> ";
+    cin >> choice;
+
+    adminSubMenu(choice);
 }
 //Function for admin submenu input
 //Displays the option to view the inventorycontrol file, product list file, go back to menu or exit program entirely
-void adminSubMenu(char choice) {
+void adminSubMenu(int choice) {
     switch (choice) {
-    case '1': //inventory control function - read and display inventory control file
+    case 1: //inventory control function - read and display inventory control file
         inventoryControl();
         break;
-    case '2': //display product list file function
+    case 2: //display product list file function
         productFile();
         break;
-    case '3': showMenu(); //Display main menu
+    case 3: showMenu(); //Display main menu
         cin >> choice;
         break;
-    case '4': //EXIT PROGRAM
+    case 4: //EXIT PROGRAM
         exit(0);
     }
 }
