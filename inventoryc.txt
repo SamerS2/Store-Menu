@@ -1,1 +1,2 @@
-adfaff
+1    TOOTHBRUSH    2             
+2    SHAMPOO       1             

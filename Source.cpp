@@ -11,9 +11,11 @@ void showMenu();
 void adminMenu();
 void adminSubMenu(char choice);
 void productFile();
+void appendInventoryc(int pNO, string& itemName, int quantity);
 void inventoryControl();
 void customerOrder();
 string invoice();
+void displayInvoice(string file);
 void appendInvoice(int pNO, string name, int quantity, double price, double sum, string file);
 
 
@@ -163,25 +165,24 @@ void customerOrder() {
         cout << "\nWould you like to order another product?\n01.YES\n02.EXIT\n";
         cin >> decision;
 
+        //Functions to append to the newly created invoice file and appends to the inventoryc.txt file
         appendInvoice(pNO, itemName, quantity, price, sum, invoiceCreation);
+        appendInventoryc(pNO, itemName, quantity);
 
     } while (decision != '2');
 
+    //Writes the total cost to the Invoice file
     fstream file(invoiceCreation, ios::app);
     
     if (file.is_open()) {
         file << fixed << setprecision(2);
         file << setw(57) << right << "Total: $" << total << endl;
+
     }
-
     file.close();
-
-
     
-
-    //TO-DO:
-    //append to inventorycontrol
-
+    //Display the invoice file to the console
+    displayInvoice(invoiceCreation);
 
 }
 
@@ -192,7 +193,7 @@ string invoice() {
     string invoiceName = "INVOICE_";
     string invoice = invoiceName + to_string(id) + ".txt";
     
-
+    //If no invoice file exists, create one INVOICE_0, increments with INVOICE_number for every new file generated
     while (fstream(invoice, ios::in)) {
         id++;
         invoice = invoiceName + to_string(id) + ".txt";
@@ -200,6 +201,7 @@ string invoice() {
     
     fstream file_create(invoice, ios::out);
 
+    //If file creation was successful, write to the newly created file the interface and fill it with customer order
     if (file_create.good()) {
         
         if (file_create.is_open()) {
@@ -245,6 +247,24 @@ void appendInvoice(int pNO, string name, int quantity, double price, double sum,
     else {
         cout << "ERROR\n";
     }
-
     textFile.close();
+}
+//Function that appends every order of product to the inventoryc.txt file
+void appendInventoryc(int pNO, string& itemName, int quantity) {
+    fstream inventory("inventoryc.txt", ios::app);
+
+    if (inventory.is_open()) {
+        inventory << setw(5) << left << pNO << setw(14) << left << itemName << setw(14) << left << quantity << endl;
+    }
+    inventory.close();
+}
+//Function to display the invoice file
+void displayInvoice(string file) {
+    fstream invoice(file);
+
+    if (invoice.is_open()) {
+        cout << invoice.rdbuf();
+    }
+
+    invoice.close();
 }
